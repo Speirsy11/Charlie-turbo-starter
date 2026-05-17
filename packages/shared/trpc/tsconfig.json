@@ -1,0 +1,9 @@
+{
+  "extends": "@charlie/tsconfig/compiled-package.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist"
+  },
+  "include": ["src", "eslint.config.ts"],
+  "exclude": ["node_modules"]
+}

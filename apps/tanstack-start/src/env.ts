@@ -2,7 +2,7 @@ import { createEnv } from "@t3-oss/env-core";
 import { vercel } from "@t3-oss/env-core/presets-zod";
 import { z } from "zod/v4";
 
-import { authEnv } from "@acme/auth/env";
+import { authEnv } from "@charlie/auth/env";
 
 export const env = createEnv({
   clientPrefix: "VITE_",
@@ -25,7 +25,7 @@ export const env = createEnv({
    * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    VITE_CLERK_PUBLISHABLE_KEY: z.string().min(1),
   },
   /**
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.

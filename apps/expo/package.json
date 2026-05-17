@@ -1,5 +1,5 @@
 {
-  "name": "@acme/expo",
+  "name": "@charlie/expo",
   "private": true,
   "main": "index.ts",
   "scripts": {
@@ -14,13 +14,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@better-auth/expo": "catalog:",
+    "@clerk/clerk-expo": "^2.19.31",
     "@legendapp/list": "^2.0.14",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:",
     "@trpc/server": "catalog:",
     "@trpc/tanstack-react-query": "catalog:",
-    "better-auth": "catalog:",
     "expo": "~54.0.20",
     "expo-constants": "~18.0.10",
     "expo-dev-client": "~6.0.16",
@@ -44,16 +43,17 @@
     "superjson": "2.2.3"
   },
   "devDependencies": {
-    "@acme/api": "workspace:*",
-    "@acme/eslint-config": "workspace:*",
-    "@acme/prettier-config": "workspace:*",
-    "@acme/tailwind-config": "workspace:*",
-    "@acme/tsconfig": "workspace:*",
+    "@charlie/api": "workspace:*",
+    "@charlie/eslint-config": "workspace:*",
+    "@charlie/prettier-config": "workspace:*",
+    "@charlie/tailwind-config": "workspace:*",
+    "@charlie/tsconfig": "workspace:*",
     "@types/react": "catalog:react19",
     "eslint": "catalog:",
+    "metro-cache": "^0.83.2",
     "prettier": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@charlie/prettier-config"
 }

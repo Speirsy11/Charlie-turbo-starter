@@ -1,0 +1,33 @@
+{
+  "name": "@charlie/trpc",
+  "private": true,
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "format": "prettier --check . --ignore-path ../../../.gitignore",
+    "lint": "eslint --flag unstable_native_nodejs_ts_config",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@charlie/auth": "workspace:*",
+    "@charlie/db": "workspace:*",
+    "@trpc/server": "catalog:",
+    "superjson": "2.2.3",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@charlie/eslint-config": "workspace:*",
+    "@charlie/prettier-config": "workspace:*",
+    "@charlie/tsconfig": "workspace:*",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  },
+  "prettier": "@charlie/prettier-config"
+}

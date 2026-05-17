@@ -1,3 +1,4 @@
+import { auth } from "@clerk/tanstack-react-start/server";
 import { createIsomorphicFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import {
@@ -9,9 +10,9 @@ import {
 import { createTRPCContext } from "@trpc/tanstack-react-query";
 import SuperJSON from "superjson";
 
-import * as Api from "@acme/api";
+import * as Api from "@charlie/api";
+import { toAuthContext } from "@charlie/auth";
 
-import { auth } from "~/auth/server";
 import { env } from "~/env";
 import { getBaseUrl } from "~/lib/url";
 
@@ -22,10 +23,14 @@ export const makeTRPCClient = createIsomorphicFn()
         unstable_localLink({
           router: Api.appRouter,
           transformer: SuperJSON,
-          createContext: () => {
+          createContext: async () => {
             const headers = new Headers(getRequestHeaders());
             headers.set("x-trpc-source", "tanstack-start-server");
-            return Api.createTRPCContext({ auth, headers });
+            const clerkAuth = await auth();
+            return Api.createTRPCContext({
+              auth: toAuthContext(clerkAuth),
+              headers,
+            });
           },
         }),
       ],

@@ -1,4 +1,4 @@
-# create-t3-turbo
+# Charlie Turbo Starter
 
 > [!NOTE]
 >
@@ -50,14 +50,22 @@ apps
       ├─ Tailwind CSS v4
       └─ E2E Typesafe API Server & Client
 packages
-  ├─ api
-  │   └─ tRPC v11 router definition
-  ├─ auth
-  │   └─ Authentication using better-auth.
-  ├─ db
-  │   └─ Typesafe db calls using Drizzle & Supabase
-  └─ ui
-      └─ Start of a UI package for the webapp using shadcn-ui
+  ├─ shared
+  │   ├─ auth
+  │   │   └─ Shared Clerk-compatible auth context helpers
+  │   ├─ db
+  │   │   └─ Typesafe db calls using Drizzle & Supabase
+  │   ├─ trpc
+  │   │   └─ Shared tRPC primitives
+  │   ├─ ui
+  │   │   └─ Start of a UI package for the webapp using shadcn-ui
+  │   └─ validators
+  ├─ features
+  │   └─ posts
+  │       └─ Example site feature router
+  └─ compositions
+      └─ api
+          └─ Composed tRPC v11 app router
 tooling
   ├─ eslint
   │   └─ shared, fine-grained, eslint presets
@@ -69,12 +77,12 @@ tooling
       └─ shared tsconfig you can extend from
 ```
 
-> In this template, we use `@acme` as a placeholder for package names. As a user, you might want to replace it with your own organization or project name. You can use find-and-replace to change all the instances of `@acme` to something like `@my-company` or `@project-name`.
+> In this template, we use `@charlie` as a placeholder for package names. As a user, you might want to replace it with your own organization or project name. You can use find-and-replace to change all the instances of `@charlie` to something like `@my-company` or `@project-name`.
 
 ## Quick Start
 
 > **Note**
-> The [db](./packages/db) package is preconfigured to use Supabase and is **edge-bound** with the [Vercel Postgres](https://github.com/vercel/storage/tree/main/packages/postgres) driver. If you're using something else, make the necessary modifications to the [schema](./packages/db/src/schema.ts) as well as the [client](./packages/db/src/index.ts) and the [drizzle config](./packages/db/drizzle.config.ts). If you want to switch to non-edge database driver, remove `export const runtime = "edge";` [from all pages and api routes](https://github.com/t3-oss/create-t3-turbo/issues/634#issuecomment-1730240214).
+> The [db](./packages/shared/db) package is preconfigured to use Supabase and is **edge-bound** with the [Vercel Postgres](https://github.com/vercel/storage/tree/main/packages/postgres) driver. If you're using something else, make the necessary modifications to the [schema](./packages/shared/db/src/schema.ts) as well as the [client](./packages/shared/db/src/index.ts) and the [drizzle config](./packages/shared/db/drizzle.config.ts). If you want to switch to non-edge database driver, remove `export const runtime = "edge";` [from all pages and api routes](https://github.com/t3-oss/create-t3-turbo/issues/634#issuecomment-1730240214).
 
 To get it running, follow the steps below:
 
@@ -96,29 +104,20 @@ cp .env.example .env
 pnpm db:push
 ```
 
-### 2. Generate Better Auth Schema
+### 2. Configure Clerk
 
-This project uses [Better Auth](https://www.better-auth.com) for authentication. The auth schema needs to be generated using the Better Auth CLI before you can use the authentication features.
+This starter uses [Clerk](https://clerk.com) for authentication across Next.js, TanStack Start, and Expo.
+
+Add the Clerk keys from your Clerk dashboard to `.env`:
 
 ```bash
-# Generate the Better Auth schema
-pnpm --filter @acme/auth generate
+CLERK_SECRET_KEY=
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+VITE_CLERK_PUBLISHABLE_KEY=
+EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=
 ```
 
-This command runs the Better Auth CLI with the following configuration:
-
-- **Config file**: `packages/auth/script/auth-cli.ts` - A CLI-only configuration file (isolated from src to prevent imports)
-- **Output**: `packages/db/src/auth-schema.ts` - Generated Drizzle schema for authentication tables
-
-The generation process:
-
-1. Reads the Better Auth configuration from `packages/auth/script/auth-cli.ts`
-2. Generates the appropriate database schema based on your auth setup
-3. Outputs a Drizzle-compatible schema file to the `@acme/db` package
-
-> **Note**: The `auth-cli.ts` file is placed in the `script/` directory (instead of `src/`) to prevent accidental imports from other parts of the codebase. This file is exclusively for CLI schema generation and should **not** be used directly in your application. For runtime authentication, use the configuration from `packages/auth/src/index.ts`.
-
-For more information about the Better Auth CLI, see the [official documentation](https://www.better-auth.com/docs/concepts/cli#generate).
+Clerk owns the auth/session tables, so there is no local auth schema generation step. Runtime apps pass Clerk auth state into the shared `@charlie/auth` context helpers.
 
 ### 3. Configure Expo `dev`-script
 
@@ -146,19 +145,15 @@ For more information about the Better Auth CLI, see the [official documentation]
 
 3. Run `pnpm dev` at the project root folder.
 
-### 4. Configuring Better-Auth to work with Expo
+### 4. Configuring Clerk to work with Expo
 
-In order to get Better-Auth to work with Expo, you must either:
+Expo uses `@clerk/clerk-expo` with `expo-secure-store` token caching. Configure your Expo publishable key in `.env`:
 
-#### Deploy the Auth Proxy (RECOMMENDED)
+```bash
+EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=
+```
 
-Better-auth comes with an [auth proxy plugin](https://www.better-auth.com/docs/plugins/oauth-proxy). By deploying the Next.js app, you can get OAuth working in preview deployments and development for Expo apps.
-
-By using the proxy plugin, the Next.js apps will forward any auth requests to the proxy server, which will handle the OAuth flow and then redirect back to the Next.js app. This makes it easy to get OAuth working since you'll have a stable URL that is publicly accessible and doesn't change for every deployment and doesn't rely on what port the app is running on. So if port 3000 is taken and your Next.js app starts at port 3001 instead, your auth should still work without having to reconfigure the OAuth provider.
-
-#### Add your local IP to your OAuth provider
-
-You can alternatively add your local IP (e.g. `192.168.x.y:$PORT`) to your OAuth provider. This may not be as reliable as your local IP may change when you change networks. Some OAuth providers may also only support a single callback URL for each app making this approach unviable for some providers (e.g. GitHub).
+For OAuth/native SSO, configure the redirect URLs and allowed origins in your Clerk dashboard for the Expo app and any deployed web apps.
 
 ### 5a. When it's time to add a new UI component
 
@@ -208,10 +203,6 @@ Let's deploy the Next.js application to [Vercel](https://vercel.com). If you've 
 2. Add your `POSTGRES_URL` environment variable.
 
 3. Done! Your app should successfully deploy. Assign your domain and use that instead of `localhost` for the `url` in the Expo app so that your Expo app can communicate with your backend when you are not in development.
-
-### Auth Proxy
-
-The auth proxy comes as a better-auth plugin. This is required for the Next.js app to be able to authenticate users in preview deployments. The auth proxy is not used for OAuth request in production deployments. The easiest way to get it running is to deploy the Next.js app to vercel.
 
 ### Expo
 

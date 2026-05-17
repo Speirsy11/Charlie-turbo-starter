@@ -9,5 +9,6 @@
     "dev": {
       "persistent": true
     }
-  }
+  },
+  "tags": ["composition"]
 }

@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, Stack } from "expo-router";
+import { ClerkLoaded, useAuth, useSSO, useUser } from "@clerk/clerk-expo";
 import { LegendList } from "@legendapp/list";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import type { RouterOutputs } from "~/utils/api";
 import { trpc } from "~/utils/api";
-import { authClient } from "~/utils/auth";
 
 function PostCard(props: {
   post: RouterOutputs["post"]["all"][number];
@@ -99,27 +99,28 @@ function CreatePost() {
 }
 
 function MobileAuth() {
-  const { data: session } = authClient.useSession();
+  const { isSignedIn, signOut } = useAuth();
+  const { user } = useUser();
+  const { startSSOFlow } = useSSO();
 
   return (
-    <>
+    <ClerkLoaded>
       <Text className="text-foreground pb-2 text-center text-xl font-semibold">
-        {session?.user.name ? `Hello, ${session.user.name}` : "Not logged in"}
+        {user?.firstName ? `Hello, ${user.firstName}` : "Not logged in"}
       </Text>
       <Pressable
-        onPress={() =>
-          session
-            ? authClient.signOut()
-            : authClient.signIn.social({
-                provider: "discord",
-                callbackURL: "/",
-              })
-        }
+        onPress={async () => {
+          if (isSignedIn) {
+            await signOut();
+            return;
+          }
+          await startSSOFlow({ strategy: "oauth_discord" });
+        }}
         className="bg-primary flex items-center rounded-sm p-2"
       >
-        <Text>{session ? "Sign Out" : "Sign In With Discord"}</Text>
+        <Text>{isSignedIn ? "Sign Out" : "Sign In With Discord"}</Text>
       </Pressable>
-    </>
+    </ClerkLoaded>
   );
 }
 

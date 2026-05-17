@@ -47,10 +47,10 @@
   },
   "globalEnv": [
     "POSTGRES_URL",
-    "AUTH_DISCORD_ID",
-    "AUTH_DISCORD_SECRET",
-    "AUTH_REDIRECT_PROXY_URL",
-    "AUTH_SECRET",
+    "CLERK_SECRET_KEY",
+    "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
+    "VITE_CLERK_PUBLISHABLE_KEY",
+    "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY",
     "PORT"
   ],
   "globalPassThroughEnv": [
@@ -60,5 +60,29 @@
     "VERCEL_ENV",
     "VERCEL_URL",
     "npm_lifecycle_event"
-  ]
+  ],
+  "boundaries": {
+    "tags": {
+      "shared": {
+        "dependencies": {
+          "allow": ["shared", "tooling"]
+        }
+      },
+      "feature": {
+        "dependencies": {
+          "allow": ["feature", "shared", "tooling"]
+        }
+      },
+      "composition": {
+        "dependencies": {
+          "allow": ["composition", "feature", "shared", "tooling"]
+        }
+      },
+      "tooling": {
+        "dependencies": {
+          "allow": ["tooling"]
+        }
+      }
+    }
+  }
 }

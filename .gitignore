@@ -46,7 +46,9 @@ yarn-error.log*
 
 # typescript
 dist/
+**/dist/
 .cache
+**/.cache/
 
 # turbo
 .turbo

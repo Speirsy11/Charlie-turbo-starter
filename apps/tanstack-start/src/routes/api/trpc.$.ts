@@ -1,24 +1,27 @@
+import { auth } from "@clerk/tanstack-react-start/server";
 import { createFileRoute } from "@tanstack/react-router";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 
-import { appRouter, createTRPCContext } from "@acme/api";
+import { appRouter, createTRPCContext } from "@charlie/api";
+import { toAuthContext } from "@charlie/auth";
 
-import { auth } from "~/auth/server";
+const handler = async (req: Request) => {
+  const clerkAuth = await auth();
 
-const handler = (req: Request) =>
-  fetchRequestHandler({
+  return fetchRequestHandler({
     endpoint: "/api/trpc",
     router: appRouter,
     req,
     createContext: () =>
       createTRPCContext({
-        auth: auth,
+        auth: toAuthContext(clerkAuth),
         headers: req.headers,
       }),
     onError({ error, path }) {
       console.error(`>>> tRPC Error on '${path}'`, error);
     },
   });
+};
 
 export const Route = createFileRoute("/api/trpc/$")({
   server: {

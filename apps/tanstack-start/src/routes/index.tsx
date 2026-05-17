@@ -7,19 +7,19 @@ import {
 } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
-import type { RouterOutputs } from "@acme/api";
-import { CreatePostSchema } from "@acme/db/schema";
-import { cn } from "@acme/ui";
-import { Button } from "@acme/ui/button";
+import type { RouterOutputs } from "@charlie/api";
+import { CreatePostSchema } from "@charlie/db/schema";
+import { cn } from "@charlie/ui";
+import { Button } from "@charlie/ui/button";
 import {
   Field,
   FieldContent,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@acme/ui/field";
-import { Input } from "@acme/ui/input";
-import { toast } from "@acme/ui/toast";
+} from "@charlie/ui/field";
+import { Input } from "@charlie/ui/input";
+import { toast } from "@charlie/ui/toast";
 
 import { AuthShowcase } from "~/component/auth-showcase";
 import { useTRPC } from "~/lib/trpc";
