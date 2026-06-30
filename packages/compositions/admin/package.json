@@ -1,0 +1,36 @@
+{
+  "name": "@charlie/admin",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "format": "prettier --check . --ignore-path ../../../.gitignore",
+    "lint": "eslint --flag unstable_native_nodejs_ts_config",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@charlie/conversations": "workspace:*",
+    "@charlie/ui": "workspace:*",
+    "@tanstack/react-query": "catalog:",
+    "react": "catalog:react19"
+  },
+  "devDependencies": {
+    "@charlie/eslint-config": "workspace:*",
+    "@charlie/prettier-config": "workspace:*",
+    "@charlie/tsconfig": "workspace:*",
+    "@types/react": "catalog:react19",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  },
+  "prettier": "@charlie/prettier-config"
+}

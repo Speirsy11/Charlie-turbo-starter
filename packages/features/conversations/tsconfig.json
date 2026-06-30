@@ -1,0 +1,9 @@
+{
+  "extends": "@charlie/tsconfig/compiled-package.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "preserve"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

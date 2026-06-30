@@ -7,28 +7,23 @@ import { ThemeProvider, ThemeToggle } from "@charlie/ui/theme";
 import { Toaster } from "@charlie/ui/toast";
 
 import { env } from "~/env";
-import { TRPCReactProvider } from "~/trpc/react";
 
 import "~/app/styles.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
     env.VERCEL_ENV === "production"
-      ? "https://turbo.t3.gg"
+      ? "https://charlie-turbo-starter.vercel.app"
       : "http://localhost:3000",
   ),
-  title: "Create T3 Turbo",
-  description: "Simple monorepo with shared backend for web & mobile apps",
+  title: "Charlie Turbo Starter",
+  description:
+    "A layered Turborepo starter with decentralized tRPC and AI chat",
   openGraph: {
-    title: "Create T3 Turbo",
-    description: "Simple monorepo with shared backend for web & mobile apps",
-    url: "https://create-t3-turbo.vercel.app",
-    siteName: "Create T3 Turbo",
-  },
-  twitter: {
-    card: "summary_large_image",
-    site: "@jullerino",
-    creator: "@jullerino",
+    title: "Charlie Turbo Starter",
+    description:
+      "A layered Turborepo starter with decentralized tRPC and AI chat",
+    siteName: "Charlie Turbo Starter",
   },
 };
 
@@ -60,7 +55,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       >
         <ClerkProvider>
           <ThemeProvider>
-            <TRPCReactProvider>{props.children}</TRPCReactProvider>
+            {props.children}
             <div className="absolute right-4 bottom-4">
               <ThemeToggle />
             </div>

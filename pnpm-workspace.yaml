@@ -1,25 +1,39 @@
 packages:
   - apps/*
-  - packages/shared/*
+  - packages/foundations/*
+  - packages/services/*
   - packages/features/*
   - packages/compositions/*
   - tooling/*
 
 catalog:
+  "@ai-sdk/anthropic": ^2.0.50
+  "@ai-sdk/react": ^2.0.97
   "@eslint/js": ^9.38.0
   "@tailwindcss/postcss": ^4.1.16
   "@tailwindcss/vite": ^4.1.16
   "@tanstack/react-form": ^1.23.8
   "@tanstack/react-query": ^5.100.10
+  "@testing-library/jest-dom": ^6.6.3
+  "@testing-library/react": ^16.3.0
+  "@testing-library/user-event": ^14.6.1
   "@trpc/client": ^11.7.1
   "@trpc/server": ^11.7.1
   "@trpc/tanstack-react-query": ^11.7.1
   "@types/node": ^22.18.12
   "@vitejs/plugin-react": 5.1.0
+  ai: ^5.0.97
+  drizzle-orm: ^0.44.7
+  drizzle-zod: ^0.8.3
   eslint: ^9.38.0
+  jsdom: ^26.0.0
+  postgres: ^3.4.7
   prettier: ^3.6.2
+  server-only: ^0.0.1
+  superjson: 2.2.3
   tailwindcss: ^4.1.16
   typescript: ^5.9.3
+  vitest: ^3.2.4
   zod: ^4.1.12
   vite: 7.1.12
 
@@ -44,3 +58,6 @@ overrides:
 publicHoistPattern:
   - "@ianvs/prettier-plugin-sort-imports"
   - prettier-plugin-tailwindcss
+  # Hoisted so drizzle's `PostgresJsDatabase` type is nameable in emitted
+  # declarations (avoids TS2742 "cannot be named" via the .pnpm realpath).
+  - postgres

@@ -26,6 +26,13 @@
       "dependsOn": ["^topo", "^build"],
       "outputs": [".cache/tsbuildinfo.json"]
     },
+    "test": {
+      "dependsOn": ["^topo", "^build"]
+    },
+    "test:watch": {
+      "cache": false,
+      "persistent": true
+    },
     "clean": {
       "cache": false
     },
@@ -46,16 +53,21 @@
     }
   },
   "globalEnv": [
-    "POSTGRES_URL",
+    "DB_HOST",
+    "DB_PORT",
+    "DB_USER",
+    "DB_PASSWORD",
+    "DB_NAME",
     "CLERK_SECRET_KEY",
     "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
-    "VITE_CLERK_PUBLISHABLE_KEY",
-    "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY",
+    "ANTHROPIC_API_KEY",
+    "ANTHROPIC_MODEL",
     "PORT"
   ],
   "globalPassThroughEnv": [
     "NODE_ENV",
     "CI",
+    "SKIP_ENV_VALIDATION",
     "VERCEL",
     "VERCEL_ENV",
     "VERCEL_URL",
@@ -63,19 +75,29 @@
   ],
   "boundaries": {
     "tags": {
-      "shared": {
+      "foundation": {
         "dependencies": {
-          "allow": ["shared", "tooling"]
+          "allow": ["foundation", "tooling"]
+        }
+      },
+      "service": {
+        "dependencies": {
+          "allow": ["foundation", "tooling"]
         }
       },
       "feature": {
         "dependencies": {
-          "allow": ["feature", "shared", "tooling"]
+          "allow": ["foundation", "service", "tooling"]
         }
       },
       "composition": {
         "dependencies": {
-          "allow": ["composition", "feature", "shared", "tooling"]
+          "allow": ["foundation", "service", "feature", "tooling"]
+        }
+      },
+      "app": {
+        "dependencies": {
+          "allow": ["foundation", "service", "feature", "composition", "tooling"]
         }
       },
       "tooling": {
