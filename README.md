@@ -55,7 +55,7 @@ Set in `.env`:
 - `DB_HOST` / `DB_PORT` / `DB_USER` / `DB_PASSWORD` / `DB_NAME` — any plain Postgres (local Docker, Neon, RDS, …). The db foundation connects via [postgres.js](https://github.com/porsager/postgres) using these discrete params.
 - `CLERK_SECRET_KEY` / `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` — from your [Clerk](https://clerk.com) app.
 - `DEV_AUTH_USER_ID` — optional and **local-development only**. Set it to an
-  stable local user ID to bypass Clerk for server requests and proxy
+  existing local user ID to bypass Clerk for server requests and proxy
   protection while reviewing locally. It is ignored outside `NODE_ENV=development`;
   production startup throws if it is set. Do not deploy it.
 - `ANTHROPIC_API_KEY` (and optional `ANTHROPIC_MODEL`) — for the AI chat.
@@ -85,8 +85,9 @@ foreign key, seed that same ID first. This bypass is server-side—Clerk client
 components such as `Show`, `useAuth`, and `UserButton` still reflect Clerk's
 browser session.
 
-As a negative check, restart without `DEV_AUTH_USER_ID` and confirm the same
-protected server request follows normal Clerk authentication. Run
+As a negative check, remove or comment out `DEV_AUTH_USER_ID` in `.env`, run
+`unset DEV_AUTH_USER_ID` to clear any exported value, then restart and confirm
+the same protected server request follows normal Clerk authentication. Run
 `pnpm --filter @charlie/auth test` to verify the development-only and
 production fail-closed guards.
 

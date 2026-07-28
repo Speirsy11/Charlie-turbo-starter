@@ -35,6 +35,24 @@ describe("development auth bypass", () => {
     expect(clerkAuth).not.toHaveBeenCalled();
   });
 
+  it("uses Clerk when the development identity is not configured", async () => {
+    const getToken = vi.fn();
+    clerkAuth.mockResolvedValue({
+      userId: "user_clerk_123",
+      sessionId: "session_123",
+      orgId: "org_123",
+      getToken,
+    });
+
+    await expect(resolveAuthContext()).resolves.toEqual({
+      userId: "user_clerk_123",
+      sessionId: "session_123",
+      orgId: "org_123",
+      getToken,
+    });
+    expect(clerkAuth).toHaveBeenCalledOnce();
+  });
+
   it("is disabled outside development even when configured", () => {
     vi.stubEnv("NODE_ENV", "test");
     vi.stubEnv("DEV_AUTH_USER_ID", "user_dev_123");

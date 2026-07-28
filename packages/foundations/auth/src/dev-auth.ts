@@ -33,6 +33,7 @@ export function devAuthUserId(): string | null {
   return rawDevAuthUserId() ?? null;
 }
 
+/** Whether requests should use the local development identity. */
 export function isDevAuthEnabled(): boolean {
   return devAuthUserId() !== null;
 }
