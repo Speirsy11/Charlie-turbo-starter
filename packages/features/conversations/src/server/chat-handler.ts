@@ -1,8 +1,8 @@
 import "server-only";
 
 import type { UIMessage } from "ai";
-import { auth } from "@clerk/nextjs/server";
 
+import { resolveAuthContext } from "@charlie/auth/server";
 import { streamChat } from "@charlie/chat/server";
 
 import { db } from "../db/client";
@@ -30,7 +30,7 @@ function uiMessageText(message: UIMessage): string {
  * owns the logic so persistence stays next to the schema.
  */
 export async function chatHandler(req: Request): Promise<Response> {
-  const { userId } = await auth();
+  const { userId } = await resolveAuthContext();
   if (!userId) {
     return new Response("Unauthorized", { status: 401 });
   }

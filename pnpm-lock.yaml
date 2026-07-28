@@ -268,9 +268,6 @@ importers:
       '@charlie/validators':
         specifier: workspace:*
         version: link:../../foundations/validators
-      '@clerk/nextjs':
-        specifier: ^7.3.5
-        version: 7.3.5(next@16.0.10(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.4(react@19.1.4))(react@19.1.4))(react-dom@19.1.4(react@19.1.4))(react@19.1.4)
       '@t3-oss/env-core':
         specifier: ^0.13.8
         version: 0.13.8(arktype@2.1.20)(typescript@5.9.3)(valibot@1.0.0-beta.15(typescript@5.9.3))(zod@4.1.12)
@@ -365,9 +362,15 @@ importers:
       '@charlie/env-schema':
         specifier: workspace:*
         version: link:../env-schema
+      '@clerk/nextjs':
+        specifier: ^7.3.5
+        version: 7.3.5(next@16.0.10(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.4(react@19.1.4))(react@19.1.4))(react-dom@19.1.4(react@19.1.4))(react@19.1.4)
       '@t3-oss/env-core':
         specifier: ^0.13.8
         version: 0.13.8(arktype@2.1.20)(typescript@5.9.3)(valibot@1.0.0-beta.15(typescript@5.9.3))(zod@4.1.12)
+      server-only:
+        specifier: 'catalog:'
+        version: 0.0.1
       zod:
         specifier: 'catalog:'
         version: 4.1.12
@@ -381,6 +384,9 @@ importers:
       '@charlie/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/typescript
+      '@charlie/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/vitest
       '@types/node':
         specifier: 'catalog:'
         version: 22.18.12
@@ -393,6 +399,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 3.2.6(@types/node@22.18.12)(jiti@2.7.0)(jsdom@26.1.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
 
   packages/foundations/db:
     dependencies:

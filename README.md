@@ -54,6 +54,10 @@ Set in `.env`:
 
 - `DB_HOST` / `DB_PORT` / `DB_USER` / `DB_PASSWORD` / `DB_NAME` — any plain Postgres (local Docker, Neon, RDS, …). The db foundation connects via [postgres.js](https://github.com/porsager/postgres) using these discrete params.
 - `CLERK_SECRET_KEY` / `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` — from your [Clerk](https://clerk.com) app.
+- `DEV_AUTH_USER_ID` — optional and **local-development only**. Set it to an
+  existing local user ID to bypass Clerk for server requests and proxy
+  protection while reviewing locally. It is ignored outside `NODE_ENV=development`;
+  production startup throws if it is set. Do not deploy it.
 - `ANTHROPIC_API_KEY` (and optional `ANTHROPIC_MODEL`) — for the AI chat.
 
 Push the conversations schema and start the dev server:
@@ -64,6 +68,28 @@ pnpm dev       # runs the Next.js app
 ```
 
 Open `/conversations`, create a conversation and send a message to see a streamed Claude response (try "what time is it?" to trigger a tool call). `/admin` shows the composition shell.
+
+### Verify protected changes without a Clerk login
+
+Keep valid Clerk development keys in `.env` for `ClerkProvider`, then start a
+local-only server identity:
+
+```bash
+DEV_AUTH_USER_ID=agent_local pnpm dev
+```
+
+Open `http://localhost:3000/conversations` with Playwright or browser
+automation and exercise the changed interaction. The conversations API will
+scope reads and writes to `agent_local`; if a feature has a users table or
+foreign key, seed that same ID first. This bypass is server-side—Clerk client
+components such as `Show`, `useAuth`, and `UserButton` still reflect Clerk's
+browser session.
+
+As a negative check, remove or comment out `DEV_AUTH_USER_ID` in `.env`, run
+`unset DEV_AUTH_USER_ID` to clear any exported value, then restart and confirm
+the same protected server request follows normal Clerk authentication. Run
+`pnpm --filter @charlie/auth test` to verify the development-only and
+production fail-closed guards.
 
 ## Scripts
 
