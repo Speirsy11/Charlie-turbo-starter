@@ -42,7 +42,6 @@
     "@charlie/trpc": "workspace:*",
     "@charlie/ui": "workspace:*",
     "@charlie/validators": "workspace:*",
-    "@clerk/nextjs": "^7.3.5",
     "@t3-oss/env-core": "^0.13.8",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:",
